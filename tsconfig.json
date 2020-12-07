@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "./lib",
+        "strict": true,
+        "declaration": true,
+        "target": "es5",
+        "lib": ["esnext", "dom"]
+    },
+    "include": [
+        "./src/**/*/"
+    ]
+}
