@@ -5,9 +5,10 @@
 import axios, {AxiosResponse, AxiosError} from 'axios';
 import omit from './utils/omit';
 import {basicParamsTransform} from './utils/onPendingUtils';
-import {OnResolve, OnReject, Enhance, Options, WarnIf, Method, UrlTemplate} from './types';
+import {OnResolve, OnReject, Enhance, Options, WarnIf, Method, UrlTemplate, OnPending} from './types';
 
 // zero 时的配置
+const passSecondThrough: OnPending = (params, options) => options;
 const extractResponseData: OnResolve = value => value.data;
 const throwThrough: OnReject = e => {
     throw e;
@@ -47,18 +48,18 @@ const createFactory = (
         options: Options = {}
     ): Promise<T> => {
         // 可以在 option 里覆盖 method 和 url，不推荐这么做，但逻辑上可以
-        const combinedOptions: Options = {
+        const combinedOptions: Options = basicParamsTransform(params, {
             ...defaultOptions,
             method, url,
             ...options,
-        };
+        });
         const {
             onPending,
             onResolve,
             onReject,
         } = combinedOptions;
 
-        const combinedOnPending = onPending || basicParamsTransform;
+        const combinedOnPending = onPending || passSecondThrough;
         const combinedOnResolve = onResolve || extractResponseData;
         const combinedOnReject = onReject || throwThrough;
 
@@ -124,7 +125,7 @@ const createFactory = (
             if (requestOptions) {
                 // 洛书的 enhance 模式可能会产生这个问题
                 // eslint-disable-next-line max-len
-                warnIf(!requestOptions.disableWarning, '在调用接口时修改了 options，这不是合适的时机，如果可以，应该在 createInterface/createVisit 阶段配置 options。设置 options.disableWarning 以禁用此警告。如果你正在使用 enhance，你可以把 options 移至第4个参数。');
+                warnIf(!requestOptions.disableWarning, '在调用接口时修改了 options，这不是合适的时机，如果可以，应该在 createInterface 阶段配置 options。设置 options.disableWarning 以禁用此警告。如果你正在使用 enhance，你可以把 options 移至第4个参数。');
                 combinedOptions = {...options, ...requestOptions};
             }
             return request<TParams, T>(method, requestUrl, requestData, combinedOptions);

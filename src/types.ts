@@ -9,10 +9,11 @@ export type UrlTemplate = string;
 export type OnPending = <TParams>(params: TParams, options: Options) => Options;
 export type OnResolve = <TParams>(response: AxiosResponse, params: TParams, options: Options) => any;
 export type OnReject = <TParams>(response: AxiosError, params: TParams, options: Options) => any;
-export type Enhance = <TParams, TRequest extends (params: any, options?: Options) => Promise<any>>(
-    request: TRequest,
+type Request = (params: any, options?: Options) => Promise<any>;
+export type Enhance = (
+    request: Request,
     options: Options,
-) => TRequest;
+) => Request;
 
 export interface Options extends AxiosRequestConfig {
     onPending?: OnPending;

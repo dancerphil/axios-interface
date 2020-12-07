@@ -1,6 +1,7 @@
 module.exports = {
-    extends: './node_modules/reskript/config/eslint.js',
+    extends: require.resolve('@reskript/config-lint/config/eslint'),
     rules: {
-        'camelcase': ['error', {allow: ['^unstable_']}]
-    }
+        'camelcase': ['error', {allow: ['^unstable_']}],
+        'no-use-before-define': 'off',
+    },
 };

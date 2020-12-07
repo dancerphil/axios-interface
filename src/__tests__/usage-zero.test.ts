@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MockAdapter from 'axios-mock-adapter';
 import {axios, createFactory} from '..';
 
