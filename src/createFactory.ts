@@ -41,12 +41,12 @@ const createFactory = (
         }
     };
 
-    const request = <TParams, T>(
+    const request = (
         method: Method,
         url: string,
-        params: TParams,
+        params?: any,
         options: Options = {}
-    ): Promise<T> => {
+    ): Promise<any> => {
         // 可以在 option 里覆盖 method 和 url，不推荐这么做，但逻辑上可以
         const combinedOptions: Options = basicParamsTransform(params, {
             ...defaultOptions,
@@ -63,11 +63,11 @@ const createFactory = (
         const combinedOnResolve = onResolve || extractResponseData;
         const combinedOnReject = onReject || throwThrough;
 
-        const handleResolve = (result: AxiosResponse): T => {
+        const handleResolve = (result: AxiosResponse) => {
             return combinedOnResolve(result, params, combinedOptions);
         };
 
-        const handleReject = (reason: AxiosError): T => {
+        const handleReject = (reason: AxiosError) => {
             return combinedOnReject(reason, params, combinedOptions);
         };
 
@@ -128,7 +128,7 @@ const createFactory = (
                 warnIf(!requestOptions.disableWarning, '在调用接口时修改了 options，这不是合适的时机，如果可以，应该在 createInterface 阶段配置 options。设置 options.disableWarning 以禁用此警告。如果你正在使用 enhance，你可以把 options 移至第4个参数。');
                 combinedOptions = {...options, ...requestOptions};
             }
-            return request<TParams, T>(method, requestUrl, requestData, combinedOptions);
+            return request(method, requestUrl, requestData, combinedOptions);
         };
         if (enhance) {
             // 如果是 factory 时期的 enhance，应该被强制使用 any 这样更 general 的类型定义
