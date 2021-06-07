@@ -73,7 +73,11 @@ const createFactory = (
 
         const config = combinedOnPending(params, combinedOptions);
 
-        return axios.request(config).then(handleResolve, handleReject);
+        const requestPromise = config instanceof Promise
+            ? config.then(awaitedConfig => axios.request(awaitedConfig))
+            : axios.request(config);
+
+        return requestPromise.then(handleResolve, handleReject);
     };
 
     const {interpolate = /{(\w+)}/g} = defaultOptions;
