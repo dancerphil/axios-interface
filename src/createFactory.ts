@@ -103,7 +103,7 @@ const createFactory = (
             defaultOptions
         );
         options.urlTemplate = urlTemplate;
-        const {enhance} = options;
+        const {enhance, encodePathVariable} = options;
 
         type Variables = {[key: string]: any} | undefined;
         type ToRequestUrl = (variables: Variables) => string;
@@ -115,7 +115,10 @@ const createFactory = (
         if (variablesInTemplate) {
             const templateKeys = variablesInTemplate.map(s => s.slice(1, -1));
             toRequestData = omit(templateKeys, warnIf);
-            toRequestUrl = (variables = {}) => urlTemplate.replace(interpolate, (match, name) => variables[name]);
+            toRequestUrl = (variables = {}) => urlTemplate.replace(interpolate, (match, name) => {
+                const variable = variables[name];
+                return encodePathVariable ? encodeURIComponent(variable) : variable;
+            });
         }
 
         const templateRequest = (

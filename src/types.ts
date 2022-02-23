@@ -21,6 +21,8 @@ export interface Options extends AxiosRequestConfig {
     enhance?: Enhance;
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
     disableWarning?: boolean;
+    encodePathVariable?: boolean;
+    transformDeleteParamsIntoBody?: boolean;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     [whatever: string]: any;
 }

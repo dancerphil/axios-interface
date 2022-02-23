@@ -30,16 +30,27 @@ const result = await getUsers(params);
 ### 配置 Options
 
 ```typescript
-interface Options {
-    onPending: (params, options) => options;
-    onResolve: (result, params, options) => result;
-    onReject: (result, params, options) => result;
-    enhance: (request, options) => request,
-    interpolate: RegExp; // 默认为 /{(\w+)}/g
-    // 一般的
-    whatever_you_want_to_custom: any; // name: string, expire: number, idempotent: boolean
-    // ... 其他会透传 axios 的 options
+interface Options extends AxiosRequestConfig {
+    onPending?: OnPending;
+    onResolve?: OnResolve;
+    onReject?: OnReject;
+    enhance?: Enhance;
+    interpolate?: RegExp; // 默认为 /{(\w+)}/g
+    disableWarning?: boolean; // 是否忽略警告
+    encodePathVariable?: boolean; // 是否转译 path 上的变量。如把 a/b 转译为 a%2fb。默认为 false
+    transformDeleteParamsIntoBody?: boolean; // 改变 DELETE 是，对参数的处理方式，默认 DELETE 是不传 body 的，有需要时开启
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    [whatever: string]: any;
 }
+
+// 其中
+type OnPending = <TParams>(params: TParams, options: Options) => Options | Promise<Options>;
+type OnResolve = <TParams>(response: AxiosResponse, params: TParams, options: Options) => any;
+type OnReject = <TParams>(response: AxiosError, params: TParams, options: Options) => any;
+type Enhance = <TRequest extends (params: any, options?: Options) => Promise<any>>(
+    request: TRequest,
+    options: Options,
+) => TRequest;
 
 ```
 
@@ -52,7 +63,7 @@ const getUsers = createInterface(method, urlTemplate, options);
 const result = getUsers(params);
 ```
 
-### onPending, onResolve, onReject, enhance
+### onPending, onResolve, onReject, enhance 的生命周期说明
 
 1. 没有 enhance 的状态下 request 的整个流程
 
@@ -60,7 +71,7 @@ const result = getUsers(params);
 
 2. enhance() 是这个流程的外部包装
 
-### whatever_you_want_to_custom
+### whatever_you_want_to_custom 的使用说明
 
 你可以在任何时候，在 options 里注入你想要的数据，在 `onPending, onResolve, onReject, enhance` 四个钩子，都会把 options 重新给你，此时，你可以根据 options 处理多种情况
 
@@ -70,11 +81,13 @@ const result = getUsers(params);
 
     - interpolate，可以修改 urlTemplate 解析
 
-- 以下参数在 createFactory 与 createInterface 时声明有效，发起时声明无效
+- 以下参数在 createFactory 与 createInterface 时声明有效，request 时声明无效
 
-    - enhance
+    - enhance, disableWarning, encodePathVariable
 
-- 其他参数在任何时候声明有效
+- 以下参数在 createFactory、 createInterface 和 request 时声明有效
+
+    - onPending, onResolve, onReject, transformDeleteParamsIntoBody
 
 ## 文档
 
