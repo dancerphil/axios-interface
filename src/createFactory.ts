@@ -25,7 +25,8 @@ const getInterfaceOptions = (
         options.enhance = optionsOrEnhance;
     }
     else {
-        options = optionsOrEnhance || {};
+        // istanbul ignore next
+        options = optionsOrEnhance ?? {};
     }
     options = {...defaultOptions, ...options};
     return options;
@@ -52,9 +53,9 @@ const createFactory = (
             onReject,
         } = combinedOptions;
 
-        const combinedOnPending = onPending || passSecondThrough;
-        const combinedOnResolve = onResolve || extractResponseData;
-        const combinedOnReject = onReject || throwThrough;
+        const combinedOnPending = onPending ?? passSecondThrough;
+        const combinedOnResolve = onResolve ?? extractResponseData;
+        const combinedOnReject = onReject ?? throwThrough;
 
         const handleResolve = (result: AxiosResponse) => {
             return combinedOnResolve(result, params, combinedOptions);

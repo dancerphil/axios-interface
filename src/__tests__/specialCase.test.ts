@@ -43,3 +43,25 @@ describe('request options', () => {
         expect(response).toStrictEqual(data);
     });
 });
+
+describe('request', () => {
+    test('', async () => {
+        const {request} = createFactory();
+
+        expect.assertions(1);
+        const response = await request('GET', '/users');
+        expect(response).toStrictEqual(data);
+    });
+});
+
+describe('unexpected', () => {
+    test('', async () => {
+        const {createInterface} = createFactory();
+        const getUser = createInterface('GET', '/users/{id}');
+        mock.onGet(/\/users\/\d*/).reply(200, data);
+
+        expect.assertions(1);
+        const response = await getUser();
+        expect(response).toStrictEqual(data);
+    });
+});

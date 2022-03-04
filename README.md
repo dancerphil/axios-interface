@@ -41,7 +41,6 @@ interface Options extends AxiosRequestConfig {
     onReject?: OnReject;
     enhance?: Enhance;
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
-    disableWarning?: boolean; // 是否忽略警告
     encodePathVariable?: boolean; // 是否转译 path 上的变量。如把 a/b 转译为 a%2fb。默认为 false
     transformDeleteParamsIntoBody?: boolean; // 改变 DELETE 是，对参数的处理方式，默认 DELETE 是不传 body 的，有需要时开启
     // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -88,7 +87,7 @@ const result = getUsers(params);
 
 - 以下参数在 createFactory 与 createInterface 时声明有效，request 时声明无效
 
-    - enhance, disableWarning, encodePathVariable
+    - enhance, encodePathVariable
 
 - 以下参数在 createFactory、 createInterface 和 request 时声明有效
 
@@ -99,19 +98,3 @@ const result = getUsers(params);
 [Best Practice](docs/BestPractice.md)
 
 [FAQ](docs/FAQ.md)
-
-## 测试
-
-yarn test
-
-## 如何贡献
-
-提交 PR
-
-## 维护者
-
-author: [dancerphil](https://github.com/dancerphil)
-
-contributor: [baidu efe team](https://github.com/ecomfe)
-
-## 讨论
