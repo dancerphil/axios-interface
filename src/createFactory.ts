@@ -5,7 +5,7 @@
 import axios, {AxiosResponse, AxiosError} from 'axios';
 import omit from './utils/omit';
 import {basicParamsTransform} from './utils/onPendingUtils';
-import {OnResolve, OnReject, Enhance, Options, WarnIf, Method, UrlTemplate, OnPending} from './types';
+import {OnResolve, OnReject, Enhance, Options, Method, UrlTemplate, OnPending} from './types';
 
 // zero 时的配置
 const passSecondThrough: OnPending = (params, options) => options;
@@ -34,13 +34,6 @@ const getInterfaceOptions = (
 const createFactory = (
     defaultOptions: Options = {}
 ) => {
-    const warnIf: WarnIf = (condition, message) => {
-        if (condition) {
-            // eslint-disable-next-line no-console
-            console.warn(message);
-        }
-    };
-
     const request = (
         method: Method,
         url: string,
@@ -82,15 +75,7 @@ const createFactory = (
 
     const {interpolate = /{(\w+)}/g} = defaultOptions;
 
-    /**
-     * 使用URL的模板快速创建一个API接口
-     *
-     * @param {string} method HTTP动词
-     * @param {string} urlTemplate URL模板，使用`{name}`作为变量占位符
-     * @param {object=} optionsOrEnhance
-     * @param {object=} exOptions
-     * @return {Function} 一个接收`data`和`extraOptions`的API接口函数
-     */
+    // 使用URL的模板快速创建一个API接口
     const createInterface = <TParams = void, T = unknown>(
         method: Method,
         urlTemplate: UrlTemplate,
@@ -114,7 +99,7 @@ const createFactory = (
         const variablesInTemplate = urlTemplate.match(interpolate);
         if (variablesInTemplate) {
             const templateKeys = variablesInTemplate.map(s => s.slice(1, -1));
-            toRequestData = omit(templateKeys, warnIf);
+            toRequestData = omit(templateKeys);
             toRequestUrl = (variables = {}) => urlTemplate.replace(interpolate, (match, name) => {
                 const variable = variables[name];
                 return encodePathVariable ? encodeURIComponent(variable) : variable;
@@ -130,9 +115,6 @@ const createFactory = (
             let combinedOptions = options;
 
             if (requestOptions) {
-                // 洛书的 enhance 模式可能会产生这个问题
-                // eslint-disable-next-line max-len
-                warnIf(!requestOptions.disableWarning, '在调用接口时修改了 options，这不是合适的时机，如果可以，应该在 createInterface 阶段配置 options。设置 options.disableWarning 以禁用此警告。如果你正在使用 enhance，你可以把 options 移至第4个参数。');
                 combinedOptions = {...options, ...requestOptions};
             }
             return request(method, requestUrl, requestData, combinedOptions);

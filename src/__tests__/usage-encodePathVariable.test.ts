@@ -14,7 +14,7 @@ interface Shape {
 }
 
 describe('encodePathVariable', () => {
-    test('encodePathVariable: false', () => {
+    test('encodePathVariable: false', async () => {
         const getUser = createInterface1<Shape>('GET', '/users/{id}');
         mock.onGet(/\/users\/*/).reply(config => {
             return [
@@ -27,15 +27,14 @@ describe('encodePathVariable', () => {
         });
 
         expect.assertions(1);
-        return getUser({id: 'a/b'}).then((response: any) => {
-            expect(response).toStrictEqual({
-                status: 'OK',
-                url: '/users/a/b',
-            });
+        const response = await getUser({id: 'a/b'});
+        expect(response).toStrictEqual({
+            status: 'OK',
+            url: '/users/a/b',
         });
     });
 
-    test('encodePathVariable: false', () => {
+    test('encodePathVariable: false', async () => {
         const getUser = createInterface2<Shape>('GET', '/users/{id}');
         mock.onGet(/\/users\/*/).reply(config => {
             return [
@@ -48,11 +47,10 @@ describe('encodePathVariable', () => {
         });
 
         expect.assertions(1);
-        return getUser({id: 'a/b'}).then((response: any) => {
-            expect(response).toStrictEqual({
-                status: 'OK',
-                url: '/users/a%2Fb',
-            });
+        const response = await getUser({id: 'a/b'});
+        expect(response).toStrictEqual({
+            status: 'OK',
+            url: '/users/a%2Fb',
         });
     });
 });

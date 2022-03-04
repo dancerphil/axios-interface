@@ -16,7 +16,7 @@ interface Shape {
 }
 
 describe('transformDeleteParamsIntoBody', () => {
-    test('transformDeleteParamsIntoBody: false', () => {
+    test('transformDeleteParamsIntoBody: false', async () => {
         const deleteUser = createInterface1<Shape>('DELETE', '/users/{id}');
         mock.onDelete(/\/users\/\d+/).reply(config => {
             return [
@@ -31,19 +31,18 @@ describe('transformDeleteParamsIntoBody', () => {
         });
 
         expect.assertions(1);
-        return deleteUser({id: 1, name: 'John', gender: 'male'}).then((response: any) => {
-            expect(response).toStrictEqual({
-                status: 'OK',
-                url: '/users/1',
-                params: {
-                    name: 'John',
-                    gender: 'male',
-                },
-            });
+        const response = await deleteUser({id: 1, name: 'John', gender: 'male'});
+        expect(response).toStrictEqual({
+            status: 'OK',
+            url: '/users/1',
+            params: {
+                name: 'John',
+                gender: 'male',
+            },
         });
     });
 
-    test('transformDeleteParamsIntoBody: true', () => {
+    test('transformDeleteParamsIntoBody: true', async () => {
         const deleteUser = createInterface2<Shape>('DELETE', '/users/{id}?name={name}');
         mock.onDelete(/\/users\/\d+/).reply(config => {
             return [
@@ -58,12 +57,11 @@ describe('transformDeleteParamsIntoBody', () => {
         });
 
         expect.assertions(1);
-        return deleteUser({id: 1, name: 'John', gender: 'male'}).then((response: any) => {
-            expect(response).toStrictEqual({
-                status: 'OK',
-                url: '/users/1?name=John',
-                data: JSON.stringify({gender: 'male'}),
-            });
+        const response = await deleteUser({id: 1, name: 'John', gender: 'male'});
+        expect(response).toStrictEqual({
+            status: 'OK',
+            url: '/users/1?name=John',
+            data: JSON.stringify({gender: 'male'}),
         });
     });
 });

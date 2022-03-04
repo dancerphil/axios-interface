@@ -1,7 +1,5 @@
 import {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios';
 
-export type WarnIf = (condition: boolean, message: string) => void;
-
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
 
 export type UrlTemplate = string;
@@ -20,7 +18,6 @@ export interface Options extends AxiosRequestConfig {
     onReject?: OnReject;
     enhance?: Enhance;
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
-    disableWarning?: boolean;
     encodePathVariable?: boolean;
     transformDeleteParamsIntoBody?: boolean;
     // eslint-disable-next-line @typescript-eslint/member-ordering

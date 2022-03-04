@@ -1,5 +1,10 @@
 # axios-interface
 
+[![version](https://img.shields.io/npm/v/axios-interface.svg?style=flat-square)](http://npm.im/axios-interface)
+[![npm downloads](https://img.shields.io/npm/dm/axios-interface.svg?style=flat-square)](https://www.npmjs.com/package/axios-interface)
+[![codecov](https://img.shields.io/codecov/c/gh/dancerphil/axios-interface)](https://codecov.io/gh/dancerphil/axios-interface)
+[![MIT License](https://img.shields.io/npm/l/axios-interface.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+
 ## 快速开始
 
 ```

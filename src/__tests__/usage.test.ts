@@ -75,15 +75,14 @@ const getIdFromConfig = (config: any) => {
 };
 
 describe('axios', () => {
-    test('basic axios usage', () => {
+    test('basic axios usage', async () => {
         const users = [{id: 1, name: 'John Smith'}];
         const data = {users};
         mock.onGet('/users').reply(200, data);
 
         expect.assertions(1);
-        return axios.get('/users').then(response => {
-            expect(response.data).toStrictEqual(data);
-        });
+        const response = await axios.get('/users');
+        expect(response.data).toStrictEqual(data);
     });
 });
 
@@ -91,7 +90,7 @@ describe('basic createInterface usage', () => {
     const users = [{id: '23000019860624742X', name: 'Daniel Thomas'}];
     const getUser = createInterface('GET', '/users');
 
-    test('basic resolve', () => {
+    test('basic resolve', async () => {
         const data = {
             status: 'OK',
             data: users,
@@ -99,12 +98,11 @@ describe('basic createInterface usage', () => {
         mock.onGet('/users').reply(200, data);
 
         expect.assertions(1);
-        return getUser().then((result: any) => {
-            expect(result).toStrictEqual(users);
-        });
+        const result = await getUser();
+        expect(result).toStrictEqual(users);
     });
 
-    test('basic reject', () => {
+    test('basic reject', async () => {
         const data = {
             status: 'FORBIDDEN',
             message: 'error',
@@ -112,21 +110,25 @@ describe('basic createInterface usage', () => {
         mock.onGet('/users').reply(200, data);
 
         expect.assertions(1);
-        return getUser().catch((error: any) => {
+        try {
+            await getUser();
+        } catch (error) {
             expect(error.message).toEqual('error');
-        });
+        }
     });
 
-    test('unhandled reject', () => {
+    test('unhandled reject', async () => {
         mock.onGet('/users').reply(502);
 
         expect.assertions(1);
-        return getUser().catch((error: any) => {
+        try {
+            await getUser();
+        } catch (error) {
             expect(error.message).toEqual('Request failed with status code 502');
-        });
+        }
     });
 
-    test('unhandled reject with data', () => {
+    test('unhandled reject with data', async () => {
         const data = {
             status: 'FORBIDDEN',
             message: 'error',
@@ -134,23 +136,27 @@ describe('basic createInterface usage', () => {
         mock.onGet('/users').reply(502, data);
 
         expect.assertions(1);
-        return getUser().catch((error: any) => {
+        try {
+            await getUser();
+        } catch (error) {
             expect(error.message).toEqual('error');
-        });
+        }
     });
 
-    test('unhandled timeout', () => {
+    test('unhandled timeout', async () => {
         mock.onGet('/users').reply(0);
 
         expect.assertions(1);
-        return getUser().catch((error: any) => {
+        try {
+            await getUser();
+        } catch (error) {
             expect(error.message).toEqual('Request failed with status code 0');
-        });
+        }
     });
 });
 
 describe('basic post/put/delete usage', () => {
-    test('basic post', () => {
+    test('basic post', async () => {
         const postUser = createInterface<any>('POST', '/users');
         mock.onPost('/users').reply(config => {
             return [
@@ -163,12 +169,11 @@ describe('basic post/put/delete usage', () => {
         });
 
         expect.assertions(1);
-        return postUser({name: 'Ruth Jones'}).then((result: any) => {
-            expect(result).toStrictEqual({id: '130000201201118292', name: 'Ruth Jones'});
-        });
+        const result = await postUser({name: 'Ruth Jones'});
+        expect(result).toStrictEqual({id: '130000201201118292', name: 'Ruth Jones'});
     });
 
-    test('basic put', () => {
+    test('basic put', async () => {
         const putUser = createInterface<any>('PUT', '/users/{id}');
         mock.onPut(/\/users\/\d+/).reply(config => {
             const id = getIdFromConfig(config);
@@ -182,12 +187,11 @@ describe('basic post/put/delete usage', () => {
         });
 
         expect.assertions(1);
-        return putUser({id: '620000199004298120', name: 'Betty Martinez'}).then((result: any) => {
-            expect(result).toStrictEqual({id: '620000199004298120', name: 'Betty Martinez'});
-        });
+        const result = await putUser({id: '620000199004298120', name: 'Betty Martinez'});
+        expect(result).toStrictEqual({id: '620000199004298120', name: 'Betty Martinez'});
     });
 
-    test('basic delete', () => {
+    test('basic delete', async () => {
         const deleteUser = createInterface<any>('DELETE', '/users/{id}');
         mock.onDelete(/\/users\/\d+/).reply(
             200,
@@ -198,9 +202,8 @@ describe('basic post/put/delete usage', () => {
         );
 
         expect.assertions(1);
-        return deleteUser({id: '140000200609308281'}).then((result: any) => {
-            expect(result).toStrictEqual(true);
-        });
+        const result = await deleteUser({id: '140000200609308281'});
+        expect(result).toStrictEqual(true);
     });
 });
 
@@ -208,7 +211,7 @@ describe('basic createInterface urlTemplate usage', () => {
     const user = {id: 1, name: 'John Smith'};
     const getUser = createInterface<any>('GET', '/users/{id}');
 
-    test('basic resolve', () => {
+    test('basic resolve', async () => {
         const data = {
             status: 'OK',
             data: user,
@@ -216,12 +219,11 @@ describe('basic createInterface urlTemplate usage', () => {
         mock.onGet(/\/users\/\d+/).reply(200, data);
 
         expect.assertions(1);
-        return getUser({id: 1}).then((result: any) => {
-            expect(result).toStrictEqual(user);
-        });
+        const result = await getUser({id: 1});
+        expect(result).toStrictEqual(user);
     });
 
-    test('basic reject', () => {
+    test('basic reject', async () => {
         const data = {
             status: 'FORBIDDEN',
             message: 'error',
@@ -229,23 +231,27 @@ describe('basic createInterface urlTemplate usage', () => {
         mock.onGet(/\/users\/\d+/).reply(200, data);
 
         expect.assertions(1);
-        return getUser({id: 1}).catch((error: any) => {
+        try {
+            await getUser({id: 1});
+        } catch (error) {
             expect(error.message).toEqual('error');
-        });
+        }
     });
 
-    test('unhandled reject', () => {
+    test('unhandled reject', async () => {
         mock.onGet(/\/users\/\d+/).reply(502);
 
         expect.assertions(1);
-        return getUser({id: 1}).catch((error: any) => {
+        try {
+            await getUser({id: 1});
+        } catch (error) {
             expect(error.message).toEqual('Request failed with status code 502');
-        });
+        }
     });
 });
 
 describe('cover several usage', () => {
-    test('form post', () => {
+    test('form post', async () => {
         const postUser = createInterface<any>(
             'POST',
             '/users',
@@ -268,12 +274,11 @@ describe('cover several usage', () => {
         });
 
         expect.assertions(1);
-        return postUser({name: 'Cynthia Gonzalez'}).then((result: any) => {
-            expect(result).toStrictEqual({id: '810000199301039884', name: 'Cynthia Gonzalez'});
-        });
+        const result = await postUser({name: 'Cynthia Gonzalez'});
+        expect(result).toStrictEqual({id: '810000199301039884', name: 'Cynthia Gonzalez'});
     });
 
-    test('X-App-Version changed', () => {
+    test('X-App-Version changed', async () => {
         const users = [{id: '62000020050109057X', name: 'Jessica White'}];
         const data = {
             status: 'OK',
@@ -296,8 +301,7 @@ describe('cover several usage', () => {
         });
 
         expect.assertions(1);
-        return getUser().then(() => getUser()).then((result: any) => {
-            expect(result).toStrictEqual(users);
-        });
+        const result = await getUser();
+        expect(result).toStrictEqual(users);
     });
 });

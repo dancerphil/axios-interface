@@ -6,16 +6,10 @@
  * - paths 一定是数组，而不能是 string
  * - 不能使用类似 'a.b' 的语法，除非 key === 'a.b'
  */
-import {WarnIf} from '../types';
-
 type Path = string;
 type Paths = Path[];
 
-const noop = () => {/* empty */};
-
-const omit = (paths: Paths, warnIf: WarnIf = noop) => {
-    warnIf(!Array.isArray(paths), 'axios-interface omit 参数类型不匹配');
-
+const omit = (paths: Paths) => {
     return (object: any) => {
         // 总是返回新对象
         const result = {...object};
