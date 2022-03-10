@@ -18,6 +18,7 @@ export interface Options extends AxiosRequestConfig {
     onReject?: OnReject;
     enhance?: Enhance;
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
+    urlTemplate?: UrlTemplate;
     encodePathVariable?: boolean;
     transformDeleteParamsIntoBody?: boolean;
     // eslint-disable-next-line @typescript-eslint/member-ordering

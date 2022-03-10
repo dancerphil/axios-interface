@@ -12,6 +12,13 @@ const getTransformKey = (options: Options) => {
 };
 
 export const basicParamsTransform: OnPending = (params, options) => {
+    const {urlTemplate} = options;
+    if (urlTemplate) {
+        if (!options.headers) {
+            options.headers = {};
+        }
+        options.headers['x-url-template'] = urlTemplate;
+    }
     if (params) {
         const key = getTransformKey(options);
         return {[key]: params, ...options};
