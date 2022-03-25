@@ -42,6 +42,7 @@ interface Options extends AxiosRequestConfig {
     enhance?: Enhance;
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
     encodePathVariable?: boolean; // 是否转译 path 上的变量。如把 a/b 转译为 a%2fb。默认为 false
+    enableUrlTemplateHeaders?: boolean; // 是否把 urlTemplate 注入 headers['x-url-template']。默认为 false
     transformDeleteParamsIntoBody?: boolean; // 改变 DELETE 是，对参数的处理方式，默认 DELETE 是不传 body 的，有需要时开启
     // eslint-disable-next-line @typescript-eslint/member-ordering
     [whatever: string]: any;
@@ -87,7 +88,7 @@ const result = getUsers(params);
 
 - 以下参数在 createFactory 与 createInterface 时声明有效，request 时声明无效
 
-    - enhance, encodePathVariable
+    - enhance, encodePathVariable, enableUrlTemplateHeaders
 
 - 以下参数在 createFactory、 createInterface 和 request 时声明有效
 

@@ -20,6 +20,7 @@ export interface Options extends AxiosRequestConfig {
     interpolate?: RegExp; // 默认为 /{(\w+)}/g
     urlTemplate?: UrlTemplate;
     encodePathVariable?: boolean;
+    enableUrlTemplateHeaders?: boolean;
     transformDeleteParamsIntoBody?: boolean;
     // eslint-disable-next-line @typescript-eslint/member-ordering
     [whatever: string]: any;
