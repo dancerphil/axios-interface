@@ -5,7 +5,7 @@
 import axios, {AxiosResponse, AxiosError} from 'axios';
 import omit from './utils/omit';
 import {basicParamsTransform} from './utils/onPendingUtils';
-import {OnResolve, OnReject, Enhance, Options, Method, UrlTemplate, OnPending} from './types';
+import {OnResolve, OnReject, Options, Method, UrlTemplate, OnPending} from './types';
 
 // zero 时的配置
 const passSecondThrough: OnPending = (params, options) => options;
@@ -15,12 +15,13 @@ const throwThrough: OnReject = e => {
 };
 
 const getInterfaceOptions = (
-    optionsOrEnhance: Options | Enhance,
+    optionsOrEnhance: Options,
     exOptions: Options,
     defaultOptions: Options
 ) => {
     let options: Options = {};
     if (typeof optionsOrEnhance === 'function') {
+        console.warn('use function as options is deprecated, use {enhance: func} instead');
         options = exOptions;
         options.enhance = optionsOrEnhance;
     }
@@ -80,8 +81,8 @@ const createFactory = (
     const createInterface = <TParams = void, T = unknown>(
         method: Method,
         urlTemplate: UrlTemplate,
-        optionsOrEnhance: Options | Enhance = {},
-        exOptions: Options = {}
+        optionsOrEnhance: Options = {},
+        exOptions: never = {} as never
     ) => {
         const options = getInterfaceOptions(
             optionsOrEnhance,
@@ -120,6 +121,7 @@ const createFactory = (
             }
             return request(method, requestUrl, requestData, combinedOptions);
         };
+
         if (enhance) {
             // 如果是 factory 时期的 enhance，应该被强制使用 any 这样更 general 的类型定义
             return enhance(templateRequest, options);

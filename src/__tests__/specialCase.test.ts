@@ -12,7 +12,7 @@ describe('enhance', () => {
     test('basic', async () => {
         const {createInterface} = createFactory();
         const enhance: Enhance = request => request;
-        const getUser = createInterface('GET', '/users', v => v, {enhance});
+        const getUser = createInterface('GET', '/users', {enhance});
 
         expect.assertions(1);
         const response = await getUser();
