@@ -2,20 +2,16 @@
   "name": "axios-interface",
   "version": "1.4.7",
   "description": "create interface from axios",
-  "main": "lib/index.js",
+  "main": "es/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "files": ["es"],
   "sideEffects": false,
-  "files": [
-    "lib",
-    "es"
-  ],
   "scripts": {
-    "build": "rm -rf lib/ && tsc",
-    "build-es": "rm -rf es/ && tsc --project tsconfig.es.json",
+    "build": "rm -rf es/ && tsc",
     "lint": "skr lint",
     "test": "skr test -- --coverage",
-    "prepublishOnly": "yarn build && yarn build-es"
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
