@@ -14,24 +14,12 @@ const throwThrough: OnReject = e => {
     throw e;
 };
 
-const getInterfaceOptions = (
-    optionsOrEnhance: Options,
-    exOptions: Options,
+const getMergedOptions = (
+    options: Options,
     defaultOptions: Options
 ) => {
-    let options: Options = {};
-    // istanbul ignore next
-    if (typeof optionsOrEnhance === 'function') {
-        console.warn('use function as options is deprecated, use {enhance: func} instead');
-        options = exOptions;
-        options.enhance = optionsOrEnhance;
-    }
-    else {
-        // istanbul ignore next
-        options = optionsOrEnhance ?? {};
-    }
-    options = {...defaultOptions, ...options};
-    return options;
+    const nextOptions = {...defaultOptions, ...options};
+    return nextOptions;
 };
 
 const createFactory = (
@@ -82,16 +70,14 @@ const createFactory = (
     const createInterface = <TParams = void, T = unknown>(
         method: Method,
         urlTemplate: UrlTemplate,
-        optionsOrEnhance: Options = {},
-        exOptions: never = {} as never
+        options: Options = {},
     ) => {
-        const options = getInterfaceOptions(
-            optionsOrEnhance,
-            exOptions,
+        const interfaceOptions = getMergedOptions(
+            options,
             defaultOptions
         );
-        options.urlTemplate = urlTemplate;
-        const {enhance, encodePathVariable} = options;
+        interfaceOptions.urlTemplate = urlTemplate;
+        const {enhance, encodePathVariable} = interfaceOptions;
 
         type Variables = {[key: string]: any} | undefined;
         type ToRequestUrl = (variables?: Variables) => string;
@@ -111,21 +97,17 @@ const createFactory = (
 
         const templateRequest = (
             params: TParams,
-            requestOptions?: Options
+            options: Options = {}
         ): Promise<T> => {
             const requestUrl = toRequestUrl(params as Variables);
             const requestData = toRequestData(params);
-            let combinedOptions = options;
-
-            if (requestOptions) {
-                combinedOptions = {...options, ...requestOptions};
-            }
-            return request(method, requestUrl, requestData, combinedOptions);
+            const requestOptions = getMergedOptions(options, interfaceOptions);
+            return request(method, requestUrl, requestData, requestOptions);
         };
 
         if (enhance) {
             // 如果是 factory 时期的 enhance，应该被强制使用 any 这样更 general 的类型定义
-            return enhance(templateRequest, options);
+            return enhance(templateRequest, interfaceOptions);
         }
         return templateRequest;
     };
