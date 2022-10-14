@@ -24,7 +24,7 @@
   "author": "Cong Zhang <dancerphil1994@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "^1.1.2"
   },
   "devDependencies": {
     "@reskript/cli": "^5.7.2",
