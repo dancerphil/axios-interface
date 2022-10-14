@@ -7,6 +7,8 @@ import omit from './utils/omit';
 import {basicParamsTransform} from './utils/onPendingUtils';
 import {OnResolve, OnReject, Options, Method, UrlTemplate, OnPending} from './types';
 
+type OptionFunc = (options: Options) => Options;
+
 // zero 时的配置
 const passSecondThrough: OnPending = (params, options) => options;
 const extractResponseData: OnResolve = value => value.data;
@@ -15,11 +17,13 @@ const throwThrough: OnReject = e => {
 };
 
 const getMergedOptions = (
-    options: Options,
+    options: Options | OptionFunc,
     defaultOptions: Options
 ) => {
-    const nextOptions = {...defaultOptions, ...options};
-    return nextOptions;
+    if (typeof options === 'function') {
+        return {...defaultOptions, ...options(defaultOptions)};
+    }
+    return {...defaultOptions, ...options};
 };
 
 const createFactory = (
@@ -70,7 +74,7 @@ const createFactory = (
     const createInterface = <TParams = void, T = unknown>(
         method: Method,
         urlTemplate: UrlTemplate,
-        options: Options = {},
+        options: Options | OptionFunc = {}
     ) => {
         const interfaceOptions = getMergedOptions(
             options,
@@ -97,7 +101,7 @@ const createFactory = (
 
         const templateRequest = (
             params: TParams,
-            options: Options = {}
+            options: Options | OptionFunc = {}
         ): Promise<T> => {
             const requestUrl = toRequestUrl(params as Variables);
             const requestData = toRequestData(params);
