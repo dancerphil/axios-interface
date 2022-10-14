@@ -1,6 +1,6 @@
 {
   "name": "axios-interface",
-  "version": "1.4.7",
+  "version": "2.0.0-alpha.0",
   "description": "create interface from axios",
   "main": "es/index.js",
   "module": "es/index.js",
