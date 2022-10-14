@@ -24,22 +24,22 @@
   "author": "Cong Zhang <dancerphil1994@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.26.0"
+    "axios": "^0.26.1"
   },
   "devDependencies": {
-    "@reskript/cli": "^4.2.1",
-    "@reskript/cli-lint": "^4.2.1",
-    "@reskript/cli-test": "^4.2.1",
-    "@reskript/config-jest": "^4.2.1",
-    "@reskript/config-lint": "^4.2.1",
-    "@types/jest": "^27.4.1",
-    "axios-mock-adapter": "^1.19.0",
-    "core-js": "^3.21.1",
-    "eslint": "^8.10.0",
-    "husky": "^7.0.4",
-    "react": "^18.0.0-rc.1",
-    "react-dom": "^18.0.0-rc.1",
-    "stylelint": "^14.5.3",
-    "typescript": "^4.6.2"
+    "@reskript/cli": "^5.7.2",
+    "@reskript/cli-lint": "^5.7.2",
+    "@reskript/cli-test": "^5.7.2",
+    "@reskript/config-jest": "^5.7.2",
+    "@reskript/config-lint": "^5.7.2",
+    "@types/jest": "^29.1.2",
+    "axios-mock-adapter": "^1.21.2",
+    "core-js": "^3.25.5",
+    "eslint": "^8.25.0",
+    "husky": "^8.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "stylelint": "^14.13.0",
+    "typescript": "^4.8.4"
   }
 }

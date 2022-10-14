@@ -20,6 +20,7 @@ const getInterfaceOptions = (
     defaultOptions: Options
 ) => {
     let options: Options = {};
+    // istanbul ignore next
     if (typeof optionsOrEnhance === 'function') {
         console.warn('use function as options is deprecated, use {enhance: func} instead');
         options = exOptions;
@@ -93,7 +94,7 @@ const createFactory = (
         const {enhance, encodePathVariable} = options;
 
         type Variables = {[key: string]: any} | undefined;
-        type ToRequestUrl = (variables: Variables) => string;
+        type ToRequestUrl = (variables?: Variables) => string;
         let toRequestData = (value: any) => value;
         let toRequestUrl: ToRequestUrl = () => urlTemplate;
         // 两者有些差异，暂时与后面 replace 保持一致
@@ -112,7 +113,7 @@ const createFactory = (
             params: TParams,
             requestOptions?: Options
         ): Promise<T> => {
-            const requestUrl = toRequestUrl(params);
+            const requestUrl = toRequestUrl(params as Variables);
             const requestData = toRequestData(params);
             let combinedOptions = options;
 
