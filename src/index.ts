@@ -5,5 +5,5 @@ import createFactory from './createFactory';
 export {axios, createFactory};
 
 // 提供 axios 的部分 ts 类型，在调整 createFactory 时可能会被使用
-export {AxiosResponse, AxiosError};
+export type {AxiosResponse, AxiosError};
 export * from './types';

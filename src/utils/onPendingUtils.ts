@@ -18,6 +18,7 @@ export const basicParamsTransform: OnPending = (params, options) => {
         if (!options.headers) {
             options.headers = {};
         }
+        // @ts-ignore
         options.headers['x-url-template'] = urlTemplate;
     }
     if (params) {

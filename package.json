@@ -1,11 +1,13 @@
 {
   "name": "axios-interface",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-aplha.1",
   "description": "create interface from axios",
   "main": "es/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
-  "files": ["es"],
+  "files": [
+    "es"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf es/ && tsc",
@@ -19,8 +21,8 @@
   },
   "author": "Cong Zhang <dancerphil1994@gmail.com>",
   "license": "MIT",
-  "peerDependencies": {
-    "axios": "^1.1.2"
+  "dependencies": {
+    "axios": "^1.2.2"
   },
   "devDependencies": {
     "@reskript/cli": "^5.7.2",

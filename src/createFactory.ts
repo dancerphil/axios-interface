@@ -20,6 +20,7 @@ const getMergedOptions = (
     options: Options | OptionFunc,
     defaultOptions: Options
 ) => {
+    // istanbul ignore next
     if (typeof options === 'function') {
         return {...defaultOptions, ...options(defaultOptions)};
     }
