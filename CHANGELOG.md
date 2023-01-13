@@ -36,14 +36,10 @@
     
     apiDeleteUser({id: 1, token: 'abc'}); // 将被处理为  DELETE /users/1?token=abc
     
-    // 如需 body，可以声明 onPending
-    const onPending: OnPending = (params, options) => {
-        if (params) {
-            const {method} = options;
-            const key = (method === 'GET' /* || method === 'DELETE' */) ? 'params' : 'data';
-            return {[key]: params, ...options};
-        }
-        return options;
+    // 如需 body，可以声明 transformDeleteParamsIntoBody，在 createFacroty、createInterface、request 阶段进行配置（在 1.4.x 推出）
+    const options = {
+        // ...others
+        transformDeleteParamsIntoBody: true,
     };
     ```
 
