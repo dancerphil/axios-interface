@@ -5,25 +5,27 @@
 [![codecov](https://img.shields.io/codecov/c/gh/dancerphil/axios-interface)](https://codecov.io/gh/dancerphil/axios-interface)
 [![MIT License](https://img.shields.io/npm/l/axios-interface.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
-## 快速开始
+`axios-interface` helps you to define api, along with its type.
+
+English | [中文](https://github.com/dancerphil/axios-interface/blob/master/docs/README-zh_CN.md)
+
+## GetStarted
 
 ```
 yarn add axios-interface
 ```
 
-## GetStarted
+### Basic Usage
 
-### 基本用法
-
-axios-interface 分为三个阶段：接口工厂 => 接口定义 => 接口调用，每个阶段传入的配置项都会覆盖前一阶段的同名配置项。
+`axios-interface` separate api into 3 stage: factory => interface => call. In each stage, you can pass in some options.
 
 ```typescript
 import {createFactory} from 'axios-interface';
 
-// 接口工厂
+// factory
 const {createInterface} = createFactory(options);
 
-// 接口定义
+// interface
 interface Params {
     companyId: string;
     keyword?: string;
@@ -35,63 +37,66 @@ interface User {
 
 const getUsers = createInterface<Params, User[]>('GET', '/rest/companies/{companyId}/users', options);
 
-// 接口调用
+// call
 const result = await getUsers({companyId: '1', keyword: 'jack'}); // GET /rest/companies/1/users?keyword=jack
 ```
 
-### 配置 Options
+### About Options
 
 ```typescript
 interface Options extends AxiosRequestConfig {
     onPending?: OnPending;
     onResolve?: OnResolve;
     onReject?: OnReject;
-    interpolate?: RegExp; // 默认为 /{(\w+)}/g
-    encodePathVariable?: boolean; // 是否转译 path 上的变量。如把 a/b 转译为 a%2fb。默认为 false
-    enableUrlTemplateHeaders?: boolean; // 是否把 urlTemplate 注入 headers['x-url-template']。默认为 false
-    transformDeleteParamsIntoBody?: boolean; // 改变 DELETE 是，对参数的处理方式，默认 DELETE 是不传 body 的，有需要时开启
-    // 一些 axios 的配置项，常用的如 headers
+    interpolate?: RegExp; // Default as /{(\w+)}/g
+    encodePathVariable?: boolean; // Parse variable like `a/b` into `a%2fb`. Default as false
+    enableUrlTemplateHeaders?: boolean; // Inject `urlTemplate` into headers['x-url-template']. Default as false
+    transformDeleteParamsIntoBody?: boolean; // Change the way to treat with `params` when `DELETE`. Default as false.
+    /**
+     * Some axios options such as headers.
+     * Or whatever custom options you want. They will pass through 3 stages.
+     */
     [whatever: string]: any;
 }
 
-// 其中，以下类型都可以通过 import {OnPending} from 'axios-interface' 导入
+// Some types can be imported as `import {OnPending} from 'axios-interface'`
 type OnPending = <TParams>(params: TParams, options: Options) => Options | Promise<Options>;
 type OnResolve = <TParams>(response: AxiosResponse, params: TParams, options: Options) => any;
 type OnReject = <TParams>(response: AxiosError, params: TParams, options: Options) => any;
 ```
 
-> NOTE: 你可以使用 [axios](https://github.com/axios/axios#request-config) 的所有配置项
+> NOTE: you can use all the configs of [axios](https://github.com/axios/axios#request-config).
 
-```javascript
-// 注意以下的所有 options，均为后者覆盖前者
+```typescript
+// options with same key will be covered.
 const {createInterface} = createFactory(options);
 const getUsers = createInterface(method, urlTemplate, options);
 const result = getUsers(params);
 ```
 
-### onPending, onResolve, onReject 的生命周期说明
+### Lifecycle about onPending, onResolve, onReject
 
-函数 call => onPending => transformRequest(axios) => 浏览器 => transformResponse(axios) => onResolve | onReject => 函数返回
+when call => onPending => transformRequest(axios) => Browsers => transformResponse(axios) => onResolve | onReject => return
 
-### whatever_you_want_to_custom 的使用说明
+### Custom Options
 
-你可以在任何时候，在 options 里注入你想要的数据，在 `onPending, onResolve, onReject` 三个钩子，都会把 options 重新给你，此时，你可以根据 options 处理多种情况
+you can inject anything into options. In `onPending, onResolve, onReject`, options will be sent back, then you can do the logic with options and your custom onex.
 
-### 参数声明时机
+### Options lifecycle that take effects
 
-- 以下参数仅在 createFactory 时声明有效
+- These options take effect only in `createFactory`
 
     - interpolate，可以修改 urlTemplate 解析
 
-- 以下参数在 createFactory 与 createInterface 时声明有效，request 时声明无效
+- These options take effect in `createFactory` and `createInterface`, not in `request`
 
     - encodePathVariable, enableUrlTemplateHeaders
 
-- 以下参数在 createFactory、 createInterface 和 request 时声明有效
+- These options take effect in `createFactory`, `createInterface` and `request`
 
     - onPending, onResolve, onReject, transformDeleteParamsIntoBody
 
-## 文档
+## Docs
 
 [Best Practice](docs/BestPractice.md)
 
