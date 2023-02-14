@@ -19,7 +19,7 @@ const throwThrough: OnReject = e => {
 const getMergedOptions = (
     options: Options | OptionFunc,
     defaultOptions: Options
-) => {
+): Options => {
     // istanbul ignore next
     if (typeof options === 'function') {
         return {...defaultOptions, ...options(defaultOptions)};
@@ -109,16 +109,23 @@ const createFactory = (
             const requestOptions = getMergedOptions(options, interfaceOptions);
             return request(method, requestUrl, requestData, requestOptions);
         };
+        templateRequest.method = method;
+        templateRequest.urlTemplate = urlTemplate;
+        templateRequest.options = interfaceOptions;
 
         if (enhance) {
             // 如果是 factory 时期的 enhance，应该被强制使用 any 这样更 general 的类型定义
-            return enhance(templateRequest, interfaceOptions);
+            const enhancedTemplateRequest = enhance(templateRequest, interfaceOptions);
+            enhancedTemplateRequest.method = method;
+            enhancedTemplateRequest.urlTemplate = urlTemplate;
+            enhancedTemplateRequest.options = interfaceOptions;
+            return enhancedTemplateRequest;
         }
         return templateRequest;
     };
 
     // 返回 request 以兼容一部分写法
-    return {request, createInterface};
+    return {request, createInterface, options: defaultOptions};
 };
 
 export default createFactory;
