@@ -12,15 +12,6 @@ const getTransformKey = (options: Options) => {
 };
 
 export const basicParamsTransform: OnPending = (params, options) => {
-    const {urlTemplate} = options;
-    // istanbul ignore next
-    if (urlTemplate && options.enableUrlTemplateHeaders) {
-        if (!options.headers) {
-            options.headers = {};
-        }
-        // @ts-ignore
-        options.headers['x-url-template'] = urlTemplate;
-    }
     if (params) {
         const key = getTransformKey(options);
         return {[key]: params, ...options};

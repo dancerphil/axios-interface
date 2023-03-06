@@ -50,7 +50,6 @@ interface Options extends AxiosRequestConfig {
     onReject?: OnReject;
     interpolate?: RegExp; // Default as /{(\w+)}/g
     encodePathVariable?: boolean; // Parse variable like `a/b` into `a%2fb`. Default as false
-    enableUrlTemplateHeaders?: boolean; // Inject `urlTemplate` into headers['x-url-template']. Default as false
     transformDeleteParamsIntoBody?: boolean; // Change the way to treat with `params` when `DELETE`. Default as false.
     /**
      * Some axios options such as headers.
@@ -90,7 +89,7 @@ you can inject anything into options. In `onPending, onResolve, onReject`, optio
 
 - These options take effect in `createFactory` and `createInterface`, not in `request`
 
-    - encodePathVariable, enableUrlTemplateHeaders
+    - encodePathVariable
 
 - These options take effect in `createFactory`, `createInterface` and `request`
 
