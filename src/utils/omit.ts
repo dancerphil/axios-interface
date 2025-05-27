@@ -13,7 +13,8 @@ const omit = (paths: Paths) => {
     return (object: any) => {
         // 总是返回新对象
         const result = {...object};
-        paths.forEach(path => {
+        paths.forEach((path) => {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete result[path];
         });
         return result;

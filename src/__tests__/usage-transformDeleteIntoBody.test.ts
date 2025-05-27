@@ -19,7 +19,7 @@ interface Shape {
 describe('transformDeleteParamsIntoBody', () => {
     test('transformDeleteParamsIntoBody: false', async () => {
         const deleteUser = createInterface1<Shape>('DELETE', '/users/{id}');
-        mock.onDelete(/\/users\/\d+/).reply(config => {
+        mock.onDelete(/\/users\/\d+/).reply((config) => {
             return [
                 200,
                 {
@@ -45,7 +45,7 @@ describe('transformDeleteParamsIntoBody', () => {
 
     test('transformDeleteParamsIntoBody: true', async () => {
         const deleteUser = createInterface2<Shape>('DELETE', '/users/{id}?name={name}');
-        mock.onDelete(/\/users\/\d+/).reply(config => {
+        mock.onDelete(/\/users\/\d+/).reply((config) => {
             return [
                 200,
                 {

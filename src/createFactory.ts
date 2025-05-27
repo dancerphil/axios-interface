@@ -12,13 +12,13 @@ type OptionFunc = (options: Options) => Options;
 // zero 时的配置
 const passSecondThrough: OnPending = (params, options) => options;
 const extractResponseData: OnResolve = value => value.data;
-const throwThrough: OnReject = e => {
+const throwThrough: OnReject = (e) => {
     throw e;
 };
 
 const getMergedOptions = (
     options: Options | OptionFunc,
-    defaultOptions: Options
+    defaultOptions: Options,
 ): Options => {
     // istanbul ignore next
     if (typeof options === 'function') {
@@ -28,13 +28,13 @@ const getMergedOptions = (
 };
 
 const createFactory = (
-    defaultOptions: Options = {}
+    defaultOptions: Options = {},
 ) => {
     const request = (
         method: Method,
         url: string,
         params?: any,
-        options: Options = {}
+        options: Options = {},
     ): Promise<any> => {
         // 可以在 option 里覆盖 method 和 url，不推荐这么做，但逻辑上可以
         const combinedOptions: Options = basicParamsTransform(params, {
@@ -75,16 +75,16 @@ const createFactory = (
     const createInterface = <TParams = void, T = unknown>(
         method: Method,
         urlTemplate: UrlTemplate,
-        options: Options | OptionFunc = {}
+        options: Options | OptionFunc = {},
     ) => {
         const interfaceOptions = getMergedOptions(
             options,
-            defaultOptions
+            defaultOptions,
         );
         interfaceOptions.urlTemplate = urlTemplate;
         const {enhance, encodePathVariable} = interfaceOptions;
 
-        type Variables = {[key: string]: any} | undefined;
+        type Variables = Record<string, any> | undefined;
         type ToRequestUrl = (variables?: Variables) => string;
         let toRequestData = (value: any) => value;
         let toRequestUrl: ToRequestUrl = () => urlTemplate;
@@ -102,7 +102,7 @@ const createFactory = (
 
         const templateRequest = (
             params: TParams,
-            options: Options | OptionFunc = {}
+            options: Options | OptionFunc = {},
         ): Promise<T> => {
             const requestUrl = toRequestUrl(params as Variables);
             const requestData = toRequestData(params);

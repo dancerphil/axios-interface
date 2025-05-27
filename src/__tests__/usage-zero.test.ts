@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable max-lines */
 import {describe, test, expect} from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import {axios, createFactory} from '..';
@@ -46,7 +47,8 @@ describe('basic createInterface usage', () => {
         expect.assertions(1);
         try {
             await getUser();
-        } catch (error) {
+        }
+        catch (error) {
             expect(error.message).toBe('Request failed with status code 502');
         }
     });
@@ -61,7 +63,8 @@ describe('basic createInterface usage', () => {
         expect.assertions(1);
         try {
             await getUser();
-        } catch (error) {
+        }
+        catch (error) {
             expect(error.message).toBe('Request failed with status code 502');
         }
     });
@@ -72,7 +75,8 @@ describe('basic createInterface usage', () => {
         expect.assertions(1);
         try {
             await getUser();
-        } catch (error) {
+        }
+        catch (error) {
             expect(error.message).toBe('Request failed with status code 0');
         }
     });
@@ -81,7 +85,7 @@ describe('basic createInterface usage', () => {
 describe('basic post/put/delete usage', () => {
     test('basic post', async () => {
         const postUser = createInterface<any>('POST', '/users');
-        mock.onPost('/users').reply(config => {
+        mock.onPost('/users').reply((config) => {
             return [
                 200,
                 {
@@ -101,7 +105,7 @@ describe('basic post/put/delete usage', () => {
 
     test('basic put', async () => {
         const putUser = createInterface<any>('PUT', '/users/{id}');
-        mock.onPut(/\/users\/\d+/).reply(config => {
+        mock.onPut(/\/users\/\d+/).reply((config) => {
             const id = getIdFromConfig(config);
             return [
                 200,
@@ -127,7 +131,7 @@ describe('basic post/put/delete usage', () => {
             {
                 status: 'OK',
                 data: true,
-            }
+            },
         );
 
         expect.assertions(1);
@@ -173,7 +177,8 @@ describe('basic createInterface urlTemplate usage', () => {
         expect.assertions(1);
         try {
             await getUser({id: 1});
-        } catch (error) {
+        }
+        catch (error) {
             expect(error.message).toEqual('Request failed with status code 502');
         }
     });

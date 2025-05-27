@@ -13,14 +13,13 @@ type Paths = Path[];
 const omit = (object: any, paths: Paths) => omitFp(paths)(object);
 
 describe('axios-interface omit', () => {
-
     // [skip] it should flatten `paths`
     // [skip] it should support deep paths
     // [skip] it should support path arrays
 
     // [skip string pattern]
     test('it should omit a key over a path (only array pattern)', () => {
-        const object = {'a.b': 1, a: {b: 2}};
+        const object = {'a.b': 1, 'a': {b: 2}};
         expect(omit(object, ['a.b'])).toEqual({a: {b: 2}});
     });
 

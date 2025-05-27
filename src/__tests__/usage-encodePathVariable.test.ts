@@ -17,7 +17,7 @@ interface Shape {
 describe('encodePathVariable', () => {
     test('encodePathVariable: false', async () => {
         const getUser = createInterface1<Shape>('GET', '/users/{id}');
-        mock.onGet(/\/users\/*/).reply(config => {
+        mock.onGet(/\/users\/*/).reply((config) => {
             return [
                 200,
                 {
@@ -37,7 +37,7 @@ describe('encodePathVariable', () => {
 
     test('encodePathVariable: false', async () => {
         const getUser = createInterface2<Shape>('GET', '/users/{id}');
-        mock.onGet(/\/users\/*/).reply(config => {
+        mock.onGet(/\/users\/*/).reply((config) => {
             return [
                 200,
                 {
