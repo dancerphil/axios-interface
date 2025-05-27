@@ -4,6 +4,7 @@
  * @see https://github.com/lodash/lodash/blob/master/test/utils.js
  * @note 简化 omit
  */
+import {describe, test, expect} from 'vitest';
 import omitFp from '../omit';
 
 type Path = string;

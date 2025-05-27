@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest';
 import * as mainExport from '..';
 import {createFactory} from '..';
 

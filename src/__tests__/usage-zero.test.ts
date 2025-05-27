@@ -1,4 +1,5 @@
 // @ts-nocheck
+import {describe, test, expect} from 'vitest';
 import MockAdapter from 'axios-mock-adapter';
 import {axios, createFactory} from '..';
 
