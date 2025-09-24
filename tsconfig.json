@@ -4,8 +4,9 @@
         "strict": true,
         "declaration": true,
         "target": "es6",
-        "moduleResolution": "node",
-        "lib": ["esnext", "dom"]
+        "moduleResolution": "bundler",
+        "lib": ["esnext", "dom"],
+        "skipLibCheck": true
     },
     "include": [
         "./src/**/*/"
